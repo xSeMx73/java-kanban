@@ -4,20 +4,31 @@ import java.util.ArrayList;
 
 public class Epic extends Task {
 
-    private ArrayList<Integer> epicSubtasks;
+    private final ArrayList<Integer> epicSubtasksID;
 
     public Epic(String title, String description) {
-        super(title, description, null);
-        epicSubtasks = new ArrayList<>();
+        super(title, description, Status.NEW);
+        epicSubtasksID = new ArrayList<>();
     }
 
     public ArrayList<Integer> getEpicSubtasks() {
-        return epicSubtasks;
+        return epicSubtasksID;
     }
 
-    public void setEpicSubtasks(ArrayList<Integer> epicSubtasks) {
-        this.epicSubtasks = epicSubtasks;
+
+
+    public void addSubIdToEpic(int subtaskId) {
+        epicSubtasksID.add(subtaskId);
     }
+
+    public void delSubIdEpic(Integer subtaskId) {
+        epicSubtasksID.remove(subtaskId);
+    }
+    public void clearSubIdEpic() {
+        epicSubtasksID.clear();
+    }
+
+
 
     @Override
     public String toString() {

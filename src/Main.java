@@ -11,36 +11,30 @@ public class Main {
         Epic epic1 = new Epic("Эпик 1", "Закончить спринт 4");
         manager.addEpic(epic1);
 
-        Subtask subtask11 = new Subtask("Эпик 1 Подзадача 1", "Пройти теорию", Status.DONE, epic1);
+        Subtask subtask11 = new Subtask("Эпик 1 Подзадача 1", "Пройти теорию", Status.DONE, epic1.id);
         manager.addSubtask(subtask11);
-        Subtask subtask12 = new Subtask("Эпик 1 Подзадача 2", "Выполнить задание спринта", Status.IN_PROGRESS, epic1);
+
+        Subtask subtask12 = new Subtask("Эпик 1 Подзадача 2", "Выполнить задание спринта", Status.IN_PROGRESS, epic1.id);
         manager.addSubtask(subtask12);
 
 
         Epic epic2 = new Epic("Эпик 2", "Отдых");
         manager.addEpic(epic2);
-        Subtask subtask21 = new Subtask("Эпик 2 Подзадача 1", "Поспать", Status.DONE, epic2);
+        Subtask subtask21 = new Subtask("Эпик 2 Подзадача 1", "Поспать", Status.DONE, epic2.id);
         manager.addSubtask(subtask21);
+        manager.deleteAllSubtask();
 
-        // Вывод
-        System.out.println("\n Вывод Эпиков : \n" + manager.getEpics());
-        System.out.println("\n Вывод Задач : \n" +  manager.getTasks());
-        System.out.println("\n Вывод Подзадач : \n" + manager.getSubtasks());
+       // Subtask subtask22 = new Subtask("Эпик 2 Подзадача 1", "Поспать еще", Status.IN_PROGRESS, epic2.id);
+       // manager.updateSubtask(subtask22, 7);
+       // System.out.println(manager.getSubtask(7));
+       // System.out.println(manager.getEpicSubtasks(epic2.id));
+      // System.out.println(manager.getSubtasks());
+      // System.out.println(manager.getEpics());
+     // System.out.println("ид эпика 1: " + epic1.id);
+      // System.out.println("ид эпика 2: " + epic2.id);
+     //System.out.println("ид подзадачи 21 : " + subtask21.id);
 
-        // Удаляем одну задачу
 
-        manager.deleteTask(1);
-        System.out.println("\n Осталось Задач : \n" +  manager.getTasks());
-
-        // Удаляем Эпик
-
-        manager.deleteEpic(6);
-        System.out.println("\n Осталось Эпиков : \n" +  manager.getEpics());
-
-        // Проверка
-        System.out.println("\n Итого Эпиков : \n" + manager.getEpics());
-        System.out.println("\n Итого Задач : \n" +  manager.getTasks());
-        System.out.println("\n Итого Подзадач : \n" + manager.getSubtasks());
 
     }
 }
