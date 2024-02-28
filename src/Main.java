@@ -22,16 +22,16 @@ public class Main {
         manager.addEpic(epic2);
         Subtask subtask21 = new Subtask("Эпик 2 Подзадача 1", "Поспать", Status.DONE, epic2.id);
         manager.addSubtask(subtask21);
-        manager.deleteAllSubtask();
+
 
        // Subtask subtask22 = new Subtask("Эпик 2 Подзадача 1", "Поспать еще", Status.IN_PROGRESS, epic2.id);
        // manager.updateSubtask(subtask22, 7);
        // System.out.println(manager.getSubtask(7));
        // System.out.println(manager.getEpicSubtasks(epic2.id));
       // System.out.println(manager.getSubtasks());
-      // System.out.println(manager.getEpics());
+     // System.out.println(manager.getEpicSubtasks(3));
      // System.out.println("ид эпика 1: " + epic1.id);
-      // System.out.println("ид эпика 2: " + epic2.id);
+     // System.out.println("ид эпика 2: " + epic2.id);
      //System.out.println("ид подзадачи 21 : " + subtask21.id);
 
 
