@@ -78,8 +78,8 @@ public class TaskManager {
     }
 
 
-    public void updateEpic(Epic epic, int id) {
-        if (epics.containsKey(id)) {
+    public void updateEpic(Epic epic) {
+        if (epics.containsKey(epic.getId())) {
             epics.get(id).description = epic.description;
             epics.get(id).title = epic.title;
         }
@@ -113,7 +113,7 @@ public class TaskManager {
 
 
     public void updateSubtask(Subtask subtask) {
-        if (subtasks.containsKey(subtask.id)) {
+        if (subtasks.containsKey(subtask.getId())) {
             if (Objects.equals(subtasks.get(subtask.id).getEpicID(), subtask.getEpicID())) {
                 subtasks.put(subtask.id, subtask);
                 checkEpicStatus(epics.get(subtask.getEpicID()));
