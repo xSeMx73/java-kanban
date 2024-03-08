@@ -1,4 +1,8 @@
+package task;
 
+import task.Status;
+
+import java.util.Objects;
 
 public class Task {
     protected Integer id;
@@ -58,4 +62,18 @@ public class Task {
                 ", Статус='" + status + '\'' +
                 '}';
     }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Objects.equals(id, task.id) && Objects.equals(title, task.title) && Objects.equals(description, task.description) && status == task.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, description, status);
+    }
+
+
 }
