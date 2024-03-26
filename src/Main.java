@@ -34,12 +34,13 @@ public class Main {
         System.out.println(manager.getTask(2));
         System.out.println(manager.getTask(1));
         System.out.println(manager.getHistory());
-        manager.deleteTask(1);
+      //  manager.deleteTask(1);
+        manager.deleteAllTasks();
         System.out.println(manager.getHistory());
         System.out.println(manager.getEpic(3));
         System.out.println(manager.getEpicSubtasks(3));
         System.out.println(manager.getHistory());
-        manager.deleteEpic(3);
+      //  manager.deleteEpic(3);
         System.out.println(manager.getHistory());
 
 //        System.out.println(manager.getSubtask(7));

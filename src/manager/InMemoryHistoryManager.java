@@ -13,8 +13,10 @@ public class InMemoryHistoryManager implements HistoryManager{
         Node prev;
         Node next;
 
-        public Node(Task task) {
+        public Node(Node prev, Task task, Node next ) {
             this.task = task;
+            this.prev = prev;
+            this.next = next;
         }
     }
 
@@ -26,23 +28,23 @@ public class InMemoryHistoryManager implements HistoryManager{
 
     @Override
     public void add(Task task) {
-        if (task == null) {
-            return;
+        if (task != null) {
+            lastLink(task);
         }
-        lastLink(task);
+
     }
 
     private void lastLink(Task task) {
         remove(task.getId());
-
-        final Node newNode = new Node(task);
+        final Node newNode = new Node(null, task, null);
         if (head == null) {
             head = newNode;
+            tail = newNode;
         } else {
             tail.next = newNode;
             newNode.prev = tail;
+            tail = newNode;
         }
-        tail = newNode;
         idMap.put(task.getId(), newNode);
     }
 
@@ -63,17 +65,24 @@ public class InMemoryHistoryManager implements HistoryManager{
         if (oldNode != null) {
             if (oldNode == head) {
                 head = oldNode.next;
-                tail = oldNode.next;
+                if (head != null) {
+                    head.prev = null;
+                }
+                if (tail == oldNode) {
+                    tail = null;
+                }
             } else if (oldNode == tail) {
                 tail = oldNode.prev;
-                tail.next = null;
+                if (tail != null) {
+                    tail.next = null;
+                }
             } else {
                 oldNode.prev.next = oldNode.next;
+                if (oldNode.next != null) {
+                    oldNode.next.prev = oldNode.prev;
+                }
             }
         }
     }
-
-
-
 }
 
