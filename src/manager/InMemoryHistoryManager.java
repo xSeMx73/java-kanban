@@ -36,13 +36,12 @@ public class InMemoryHistoryManager implements HistoryManager{
 
     private void lastLink(Task task) {
         remove(task.getId());
-        final Node newNode = new Node(null, task, null);
+        final Node newNode = new Node(tail, task, null);
         if (head == null) {
             head = newNode;
             tail = newNode;
         } else {
             tail.next = newNode;
-            newNode.prev = tail;
             tail = newNode;
         }
         idMap.put(task.getId(), newNode);
