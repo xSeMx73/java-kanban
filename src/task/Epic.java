@@ -1,4 +1,6 @@
 package task;
+import static task.TaskType.EPIC;
+
 
 import java.util.ArrayList;
 
@@ -16,7 +18,9 @@ public class Epic extends Task {
         return newEpicSubtasksID;
     }
 
-
+    public TaskType getType(){
+        return EPIC;
+    }
 
     public void addSubIdToEpic(int subtaskId) {
         epicSubtasksID.add(subtaskId);
@@ -33,11 +37,10 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "Эпик { " +
-                "ID " + id +
-                ", Название='" + title + '\'' +
-                ", Описание='" + description + '\'' +
-                ", Статус='" + status + '\'' +
-                '}';
+        return this.getId() + ","
+                + this.getType() + ","
+                + this.getTitle() + ","
+                + this.getStatus() + ","
+                + this.getDescription() + ",";
     }
 }

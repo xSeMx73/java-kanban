@@ -1,0 +1,8 @@
+id,type,name,status,description,epic
+1,TASK,Задача 1,DONE,Повторить спринт 4,
+2,TASK,Задача 2,NEW,Начать спринт 5,
+3,EPIC,Эпик 1,IN_PROGRESS,Закончить спринт 4,
+4,EPIC,Эпик 2,NEW,Отдых,
+5,SUBTASK,Эпик 1 Подзадача 1,DONE,Пройти теорию,3
+6,SUBTASK,Эпик 1 Подзадача 2,IN_PROGRESS,Выполнить задание спринта,3
+1,3,5,

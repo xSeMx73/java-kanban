@@ -1,7 +1,7 @@
 package task;
 
 import task.Status;
-
+import static task.TaskType.TASK;
 import java.util.Objects;
 
 public class Task {
@@ -18,11 +18,12 @@ public class Task {
 
     }
 
+
+
     public int getId() {
         return id;
     }
     public void setId(int id) {
-
         this.id = id;
 
     }
@@ -34,8 +35,9 @@ public class Task {
     public void setStatus(Status status) {
         this.status = status;
     }
-
-
+    public TaskType getType(){
+        return TASK;
+    }
 
     public String getTitle() {
         return title;
@@ -55,13 +57,13 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Задача {" +
-                "ID " + id +
-                ", Название='" + title + '\'' +
-                ", Описание='" + description + '\'' +
-                ", Статус='" + status + '\'' +
-                '}';
+        return this.getId() + ","
+                + this.getType() + ","
+                + this.getTitle() + ","
+                + this.getStatus() + ","
+                + this.getDescription() + ",";
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

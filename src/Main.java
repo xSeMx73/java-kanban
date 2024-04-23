@@ -16,6 +16,7 @@ public class Main {
         Epic epic1 = new Epic("Эпик 1", "Закончить спринт 4");
         manager.addEpic(epic1);
 
+
         Subtask subtask11 = new Subtask("Эпик 1 Подзадача 1", "Пройти теорию", Status.DONE, epic1.getId());
         manager.addSubtask(subtask11);
 
@@ -29,7 +30,7 @@ public class Main {
         manager.addEpic(epic2);
 
 
-        System.out.println(manager.getTask(1));
+ /*       System.out.println(manager.getTask(1));
         System.out.println(manager.getTask(2));
         System.out.println(manager.getTask(2));
         System.out.println(manager.getTask(1));
@@ -41,7 +42,7 @@ public class Main {
         System.out.println(manager.getEpicSubtasks(3));
         System.out.println(manager.getHistory());
       //  manager.deleteEpic(3);
-        System.out.println(manager.getHistory());
+        System.out.println(manager.getHistory());*/
 
 //        System.out.println(manager.getSubtask(7));
 //        System.out.println(manager.getEpicSubtasks(epic2.getId()));

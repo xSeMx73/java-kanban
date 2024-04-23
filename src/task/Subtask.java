@@ -1,6 +1,7 @@
 package task;
 
-import task.Status;
+import static task.TaskType.SUBTASK;
+
 
 public class Subtask extends Task {
 
@@ -15,15 +16,19 @@ public class Subtask extends Task {
     public Integer getEpicID() {
         return epicID;
     }
-    
+
+    public TaskType getType(){
+        return SUBTASK;
+    }
+
 
     @Override
     public String toString() {
-        return "Подзадача{" +
-                "ID " + id +
-                ", Название='" + title + '\'' +
-                ", Описание='" + description + '\'' +
-                ", Статус='" + status + '\'' +
-                '}';
+        return this.getId() + ","
+                + this.getType() + ","
+                + this.getTitle() + ","
+                + this.getStatus() + ","
+                + this.getDescription() + ","
+                + this.getEpicID() ;
     }
 }
