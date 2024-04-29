@@ -6,13 +6,13 @@ import java.util.*;
 
 
 public class InMemoryTaskManager implements TaskManager {
-    private int id;
+   protected int id;
     protected final Map<Integer, Task> tasks;
-    private final Map<Integer, Subtask> subtasks;
-    private final Map<Integer, Epic> epics;
+   protected final Map<Integer, Subtask> subtasks;
+   protected final Map<Integer, Epic> epics;
 
 
-    public static HistoryManager historyManager = Managers.getDefaultHistory();
+   protected HistoryManager historyManager = Managers.getDefaultHistory();
 
     public InMemoryTaskManager() {
         id = 0;

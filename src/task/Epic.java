@@ -37,7 +37,7 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return this.getId() + ","
+        return id + ","
                 + this.getType() + ","
                 + this.getTitle() + ","
                 + this.getStatus() + ","
