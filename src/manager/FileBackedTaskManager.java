@@ -50,9 +50,10 @@ private void loadHistory (String history) {
     }
 
 }
-   public FileBackedTaskManager loadFromFile (File file) throws IOException {
+    public static FileBackedTaskManager loadFromFile (File file) throws IOException {
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
-        int id;
+        int id = 0;
+        int maxID = 0;
         FileReader reader = new FileReader(file);
         BufferedReader bufferedReader = new BufferedReader(reader);
         bufferedReader.readLine();
@@ -65,27 +66,37 @@ private void loadHistory (String history) {
                         id = Integer.parseInt(split[0]);
                         Task task = new Task(split[2], split[4], Status.valueOf(split[3]));
                         task.setId(id);
-                        tasks.put(id, task);
+                        fileBackedTaskManager.tasks.put(id, task);
                         break;
                     case "EPIC":
                         id = Integer.parseInt(split[0]);
                         Epic epic = new Epic(split[2], split[4]);
                         epic.setId(id);
-                        epics.put(id, epic);
+                        fileBackedTaskManager.epics.put(id, epic);
                         break;
                     case "SUBTASK":
                         id = Integer.parseInt(split[0]);
                         Subtask subtask = new Subtask(split[2], split[4], Status.valueOf(split[3]), Integer.parseInt(split[5]));
                         subtask.setId(id);
-                        subtasks.put(id, subtask);
+                        fileBackedTaskManager.subtasks.put(id, subtask);
                         break;
                 }
             } else {
-                        String history = bufferedReader.readLine();
-                        loadHistory(history);
+                String history = bufferedReader.readLine();
+                fileBackedTaskManager.loadHistory(history);
                     }
+            if (id > maxID){
+                maxID = id;
+            }
         }
         bufferedReader.close();
+        for (Subtask s : fileBackedTaskManager.subtasks.values()){
+            int epicID = s.getEpicID();
+            if(fileBackedTaskManager.epics.containsKey(epicID)){
+                fileBackedTaskManager.epics.get(epicID).addSubIdToEpic(s.getId());
+            }
+        }
+        fileBackedTaskManager.id = maxID;
      return fileBackedTaskManager;
     }
 
@@ -190,12 +201,10 @@ private void loadHistory (String history) {
 
     public static void main(String[] args) throws IOException {
 
-        FileBackedTaskManager manager = new FileBackedTaskManager(new File("dataBase.csv"));
-         manager.loadFromFile(new File("dataBase.csv"));
+        FileBackedTaskManager manager = loadFromFile(new File("dataBase.csv"));
 
         manager.addTask(new Task("Задача 1", "Повторить спринт 4", Status.DONE));
         manager.addTask(new Task("Задача 2", "Начать спринт 5", Status.NEW));
-
 
         Epic epic1 = new Epic("Эпик 1", "Закончить спринт 4");
         manager.addEpic(epic1);
@@ -216,10 +225,12 @@ private void loadHistory (String history) {
         manager.getSubtask(5);
         manager.getEpic(3);
 
-        System.out.println(manager.getTasks());
-        System.out.println(manager.getSubtasks());
-        System.out.println(manager.getEpics());
-        System.out.println(manager.getHistory());
+        System.out.println("Задачи " + manager.getTasks());
+        System.out.println("Подзадачи " + manager.getSubtasks());
+        System.out.println("Эпики " + manager.getEpics());
+        System.out.println("История " + manager.getHistory());
+        System.out.println("Подзадачи эпика 1 " + manager.getEpicSubtasks(3));
+        System.out.println("Подзадачи эпика 2 " + manager.getEpicSubtasks(6));
 
     }
 }
