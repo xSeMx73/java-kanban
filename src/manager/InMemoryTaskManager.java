@@ -2,7 +2,9 @@ package manager;
 
 import task.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class InMemoryTaskManager implements TaskManager {
@@ -10,7 +12,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected final Map<Integer, Task> tasks;
    protected final Map<Integer, Subtask> subtasks;
    protected final Map<Integer, Epic> epics;
-
+    protected Set<Task> prioritizedTasks;
 
    protected HistoryManager historyManager = Managers.getDefaultHistory();
 
@@ -19,13 +21,21 @@ public class InMemoryTaskManager implements TaskManager {
         tasks = new HashMap<>();
         subtasks = new HashMap<>();
         epics = new HashMap<>();
-
+        this.prioritizedTasks = new TreeSet<>(taskComparator);
     }
 
 
     @Override
     public Task addTask(Task newTask) {
         newTask.setId(++id);
+        if (!(newTask.getStartTime() == null)) {
+            if (!valid(newTask)) {
+                System.out.println("Задача c ID:" + newTask.getId() + " Название:" + newTask.getTitle() + " " + "пересекается по времени с другой задачей");
+                return null;
+            }
+
+            prioritizedTasks.add(newTask);
+        }
         tasks.put(newTask.getId(), newTask);
         return newTask;
     }
@@ -41,34 +51,46 @@ public class InMemoryTaskManager implements TaskManager {
     public Subtask addSubtask(Subtask newSubtask) {
         if (epics.containsKey(newSubtask.getEpicID())) {
             newSubtask.setId(++id);
+            if (!(newSubtask.getStartTime() == null)) {
+                if (!valid(newSubtask)) {
+                    System.out.println("Подзадача c ID:" + newSubtask.getId() + " Название:" + newSubtask.getTitle() + " " + "пересекается по времени с другой задачей");
+                    return null;
+                }
+                prioritizedTasks.add(newSubtask);
+                epics.get(newSubtask.getEpicID()).setStartTime(newSubtask.getStartTime());
+                epics.get(newSubtask.getEpicID()).setDuration(newSubtask.getDuration());
+                epics.get(newSubtask.getEpicID()).setEndTime(newSubtask.getEndTime());
+            }
             subtasks.put(newSubtask.getId(), newSubtask);
             epics.get(newSubtask.getEpicID()).addSubIdToEpic(newSubtask.getId());
             checkEpicStatus(epics.get(newSubtask.getEpicID()));
-
         }
         return newSubtask;
     }
 
     @Override
-    public ArrayList<Subtask> getEpicSubtasks(int id) {
-        ArrayList<Subtask> subtasksList = new ArrayList<>();
+    public List<Subtask> getEpicSubtasks(int id) {
+        List<Subtask> subtasksList = new ArrayList<>();
         if (epics.containsKey(id)) {
-            for (Integer sub : epics.get(id).getEpicSubtasks()) {
-                subtasksList.add(subtasks.get(sub));
-
+            subtasksList = getEpic(id).getEpicSubtasks().stream()
+                    .map(subtasks::get)
+                    .collect(Collectors.toList());
             }
-        }
         return subtasksList;
     }
-
 
     @Override
     public void updateTask(Task task, int id) {
         if (tasks.containsKey(id)) {
+            if (!(task.getStartTime() == null)) {
+                if (!valid(task)) {
+                    System.out.println("Задача c ID:" + task.getId() + " Название:" + task.getTitle() + " " + "пересекается по времени с другой задачей");
+                }
+                prioritizedTasks.add(task);
+            }
             tasks.put(id, task);
         }
     }
-
     @Override
     public Task getTask(int id) {
         historyManager.add(tasks.get(id));
@@ -105,6 +127,7 @@ public class InMemoryTaskManager implements TaskManager {
             epics.get(id).setDescription(epic.getDescription());
             epics.get(id).setTitle(epic.getTitle());
         }
+
     }
 
     @Override
@@ -153,6 +176,17 @@ public class InMemoryTaskManager implements TaskManager {
                 subtasks.put(subtask.getId(), subtask);
                 checkEpicStatus(epics.get(subtask.getEpicID()));
             }
+            if (!(subtask.getStartTime() == null)) {
+                prioritizedTasks.remove(subtasks.get(subtask.getId()));
+                if (!valid(subtask)) {
+                    System.out.println("Подзадача c ID:" + subtask.getId() + " Название:" + subtask.getTitle() + " " + "пересекается по времени с другой задачей");
+                    return;
+                }
+                prioritizedTasks.add(subtask);
+                epics.get(subtask.getEpicID()).setStartTime(subtask.getStartTime());
+                epics.get(subtask.getEpicID()).setDuration(subtask.getDuration());
+                epics.get(subtask.getEpicID()).setEndTime(subtask.getEndTime());
+            }
         }
     }
 
@@ -190,7 +224,10 @@ public class InMemoryTaskManager implements TaskManager {
         }
         subtasks.clear();
     }
-
+    @Override
+    public List<Task> getPrioritizedTasks() {
+        return new ArrayList<>(prioritizedTasks);
+    }
     public List<Task> getHistory() {
         return historyManager.getHistory();
     }
@@ -228,6 +265,45 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
     }
+    private boolean valid (Task task) {
+        if (prioritizedTasks.isEmpty()) {
+            return true;
+        }
+        LocalDateTime start = task.getStartTime();
+        LocalDateTime finish = task.getEndTime();
+        if (start == null) {
+            return true;
+        }
+        for (Task prioritizedTask : prioritizedTasks) {
+            LocalDateTime begin = prioritizedTask.getStartTime();
+            LocalDateTime end = prioritizedTask.getEndTime();
+
+            if (start.isEqual(begin) || start.isEqual(end) || finish.isEqual(end) || finish.isEqual(begin)) return false;
+            if ((start.isAfter(begin) && start.isBefore(end)) || (finish.isAfter(begin) && finish.isBefore(end))) return false;
+            if (start.isBefore(begin) && finish.isAfter(end)) return false;
+        }
+        return true;
+    }
+
+
+    Comparator<Task> taskComparator = (o1, o2) -> {
+        if (o1.getId() == o2.getId()) {
+            return 0;
+        }
+        if (o1.getStartTime() == null) {
+            return 1;
+        }
+        if (o2.getStartTime() == null) {
+            return -1;
+        }
+        if (o1.getStartTime().isBefore(o2.getStartTime())) {
+            return -1;
+        } else if (o1.getStartTime().isAfter(o2.getStartTime())) {
+            return 1;
+        } else {
+            return o1.getId() - o2.getId();
+        }
+    };
 
 }
 
