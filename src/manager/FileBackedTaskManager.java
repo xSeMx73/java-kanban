@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 
+
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private File dataBase;
@@ -37,7 +38,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-
 private void loadHistory (String history) {
     String[] splitHistory = history.split(",");
     for (String s : splitHistory) {
@@ -50,7 +50,6 @@ private void loadHistory (String history) {
             historyManager.add(getSubtask((idH)));
         }
     }
-
 }
     public static FileBackedTaskManager loadFromFile (File file) throws IOException {
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
@@ -227,7 +226,6 @@ private void loadHistory (String history) {
         save();
     }
 
-
     public static void main(String[] args) throws IOException {
 // очистка файла
         PrintWriter writer = new PrintWriter("dataBase.csv");
@@ -265,18 +263,19 @@ private void loadHistory (String history) {
         manager.addSubtask(subtask13);
 
         manager.getTask(1);
-        manager.getSubtask(6);
-        manager.getEpic(5);
+        manager.getSubtask(7);
+        manager.getEpic(4);
+
 
         System.out.println("Задачи " + manager.getTasks());
         System.out.println("Подзадачи " + manager.getSubtasks());
         System.out.println("Эпики " + manager.getEpics());
+
         System.out.println("История " + manager.getHistory());
-        System.out.println("Подзадачи эпика 1 " + manager.getEpicSubtasks(5));
+        System.out.println("Подзадачи эпика 1 " + manager.getEpicSubtasks(4));
         System.out.println("Подзадачи эпика 2 " + manager.getEpicSubtasks(10));
 
         System.out.print("Задачи по порядку приоритета " + manager.prioritizedTasks);
-
 
             }
         }

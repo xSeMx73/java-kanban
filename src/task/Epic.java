@@ -5,7 +5,6 @@ import static task.TaskType.EPIC;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class Epic extends Task {
@@ -26,6 +25,18 @@ public class Epic extends Task {
             super.setDuration(duration);
         }
     }
+public void timeToNuLL (Subtask subtask){
+        super.setStartTime(null);
+        endTime = null;
+    if (!(super.duration == null) && !(subtask.getDuration() == null)) {
+        super.setDuration(super.duration.minus(subtask.getDuration()));
+        if (super.getDuration().toMinutes() == 0){
+            super.setDuration(null);
+        }
+    }
+}
+
+
 
     @Override
     public void setStartTime(LocalDateTime startTime) {

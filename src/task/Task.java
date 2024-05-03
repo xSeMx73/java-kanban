@@ -1,11 +1,10 @@
 package task;
 
-import task.Status;
+
 import static task.TaskType.TASK;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
@@ -35,11 +34,11 @@ public class Task {
     public LocalDateTime getEndTime() {
         if (startTime == null) {
             return null;
-        }
-        if (duration == null) {
+        } else if (duration == null) {
             return startTime;
+        } else {
+            return startTime.plus(duration);
         }
-        return startTime.plus(duration);
     }
     public void setDuration(Duration duration) {
         this.duration = duration;
