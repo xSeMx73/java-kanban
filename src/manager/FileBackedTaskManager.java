@@ -3,7 +3,9 @@ import java.io.FileWriter;
 import Exceptions.ManagerSaveException;
 import task.*;
 import java.io.*;
-
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -16,7 +18,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void save() throws ManagerSaveException {
         try (FileWriter writer = new FileWriter(dataBase)) {
-            writer.write("id,type,name,status,description,epic" + "\n");
+            writer.write("id,type,name,status,description,epic,startTime,duration,endTime" + "\n");
             for (Task task : getTasks()) {
                 writer.write(task.toString() + "\n");
             }
@@ -66,18 +68,45 @@ private void loadHistory (String history) {
                         id = Integer.parseInt(split[0]);
                         Task task = new Task(split[2], split[4], Status.valueOf(split[3]));
                         task.setId(id);
+                        try {
+                           if (!(split[6] == null)) {
+                                task.setStartTime(LocalDateTime.parse(split[6]));
+                                task.setDuration(Duration.parse(split[7]));
+                                fileBackedTaskManager.prioritizedTasks.add(task);
+                           }
+                     } catch (RuntimeException ignored){
+
+                        }
                         fileBackedTaskManager.tasks.put(id, task);
                         break;
                     case "EPIC":
                         id = Integer.parseInt(split[0]);
                         Epic epic = new Epic(split[2], split[4]);
                         epic.setId(id);
+                        try {
+                            if (!(split[6] == null)) {
+                                epic.setStartTime(LocalDateTime.parse(split[6]));
+                                epic.setDuration(Duration.parse(split[7]));
+                                epic.setEndTime(LocalDateTime.parse(split[8]));
+                            }
+                        } catch (RuntimeException ignored){
+
+                        }
                         fileBackedTaskManager.epics.put(id, epic);
                         break;
                     case "SUBTASK":
                         id = Integer.parseInt(split[0]);
                         Subtask subtask = new Subtask(split[2], split[4], Status.valueOf(split[3]), Integer.parseInt(split[5]));
                         subtask.setId(id);
+                        try {
+                            if (!(split[6] == null)) {
+                                subtask.setStartTime(LocalDateTime.parse(split[6]));
+                                subtask.setDuration(Duration.parse(split[7]));
+                                fileBackedTaskManager.prioritizedTasks.add(subtask);
+                            }
+                        } catch (RuntimeException ignored){
+
+                        }
                         fileBackedTaskManager.subtasks.put(id, subtask);
                         break;
                 }
@@ -200,11 +229,21 @@ private void loadHistory (String history) {
 
 
     public static void main(String[] args) throws IOException {
+// очистка файла
+        PrintWriter writer = new PrintWriter("dataBase.csv");
+        writer.print("");
+        writer.flush();
+        writer.close();
 
         FileBackedTaskManager manager = loadFromFile(new File("dataBase.csv"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        LocalDateTime startTime1 = LocalDateTime.parse(LocalDateTime.now().format(formatter),formatter);
 
-        manager.addTask(new Task("Задача 1", "Повторить спринт 4", Status.DONE));
+
+        manager.addTask(new Task("Задача 1", "Повторить спринт 4", Status.DONE, startTime1.plusHours(12), Duration.ofHours(1)));
+        manager.addTask(new Task("Задача 3", "Повторить спринт 8", Status.DONE, startTime1.plusHours(7), Duration.ofHours(1)));
         manager.addTask(new Task("Задача 2", "Начать спринт 5", Status.NEW));
+        manager.addTask(new Task("Задача 4", "Повторить спринт 10", Status.DONE, startTime1.plusHours(7), Duration.ofHours(1)));
 
         Epic epic1 = new Epic("Эпик 1", "Закончить спринт 4");
         manager.addEpic(epic1);
@@ -212,8 +251,12 @@ private void loadHistory (String history) {
         Subtask subtask11 = new Subtask("Эпик 1 Подзадача 1", "Пройти теорию", Status.DONE, epic1.getId());
         manager.addSubtask(subtask11);
 
-        Subtask subtask12 = new Subtask("Эпик 1 Подзадача 2", "Выполнить задание спринта", Status.IN_PROGRESS, epic1.getId());
+        Subtask subtask12 = new Subtask("Эпик 1 Подзадача 2", "Выполнить задание спринта", Status.IN_PROGRESS, epic1.getId(),startTime1.plusHours(9), Duration.ofHours(1));
         manager.addSubtask(subtask12);
+        Subtask subtask14 = new Subtask("Эпик 1 Подзадача 3", "Выполнить задание спринта 8", Status.IN_PROGRESS, epic1.getId(),startTime1.plusHours(1), Duration.ofHours(1));
+        manager.addSubtask(subtask14);
+        Subtask subtask15 = new Subtask("Эпик 1 Подзадача 4", "Выполнить задание спринта 9", Status.IN_PROGRESS, epic1.getId(),startTime1.plusHours(1), Duration.ofHours(1));
+        manager.addSubtask(subtask15);
 
         Epic epic2 = new Epic("Эпик 2", "Отдых");
         manager.addEpic(epic2);
@@ -222,17 +265,20 @@ private void loadHistory (String history) {
         manager.addSubtask(subtask13);
 
         manager.getTask(1);
-        manager.getSubtask(5);
-        manager.getEpic(3);
+        manager.getSubtask(6);
+        manager.getEpic(5);
 
         System.out.println("Задачи " + manager.getTasks());
         System.out.println("Подзадачи " + manager.getSubtasks());
         System.out.println("Эпики " + manager.getEpics());
         System.out.println("История " + manager.getHistory());
-        System.out.println("Подзадачи эпика 1 " + manager.getEpicSubtasks(3));
-        System.out.println("Подзадачи эпика 2 " + manager.getEpicSubtasks(6));
+        System.out.println("Подзадачи эпика 1 " + manager.getEpicSubtasks(5));
+        System.out.println("Подзадачи эпика 2 " + manager.getEpicSubtasks(10));
 
-    }
-}
+        System.out.print("Задачи по порядку приоритета " + manager.prioritizedTasks);
+
+
+            }
+        }
 
 

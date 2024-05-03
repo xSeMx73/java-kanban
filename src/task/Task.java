@@ -2,6 +2,10 @@ package task;
 
 import task.Status;
 import static task.TaskType.TASK;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
@@ -9,6 +13,8 @@ public class Task {
     protected String title;
     protected String description;
     protected Status status;
+    protected LocalDateTime startTime;
+    protected Duration duration;
 
 
     public Task(String title, String description, Status status) {
@@ -17,17 +23,44 @@ public class Task {
         this.status = status;
 
     }
+    public Task (String title, String description, Status status,LocalDateTime startTime, Duration duration) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.startTime = startTime;
+        this.duration = duration;
 
+    }
 
+    public LocalDateTime getEndTime() {
+        if (startTime == null) {
+            return null;
+        }
+        if (duration == null) {
+            return startTime;
+        }
+        return startTime.plus(duration);
+    }
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
 
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+    public Duration getDuration() {
+        return duration;
+    }
     public int getId() {
         return id;
     }
     public void setId(int id) {
         this.id = id;
-
     }
-
     public Status getStatus() {
         return status;
     }
@@ -61,7 +94,11 @@ public class Task {
                 + this.getType() + ","
                 + this.getTitle() + ","
                 + this.getStatus() + ","
-                + this.getDescription() + ",";
+                + this.getDescription() + ","
+                + ","
+                + Objects.toString(getStartTime(), "") + ","
+                + Objects.toString(getDuration(), "") + ","
+                + Objects.toString(getEndTime(), "");
     }
 
     @Override
