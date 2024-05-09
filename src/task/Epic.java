@@ -19,7 +19,7 @@ public class Epic extends Task {
 
     @Override
     public void setDuration(Duration duration) {
-        if (!(super.duration == null)) {
+        if (super.duration != null) {
             super.setDuration(super.duration.plus(duration));
         } else {
             super.setDuration(duration);
