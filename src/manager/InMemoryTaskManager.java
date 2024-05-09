@@ -222,6 +222,10 @@ public class InMemoryTaskManager implements TaskManager {
         return new ArrayList<>(subtasks.values());
     }
 
+    public List<Task> getPrioritizedTasks() {
+       return new ArrayList<>(prioritizedTasks);
+    }
+
 
     @Override
     public void deleteSubtask(int id) {
