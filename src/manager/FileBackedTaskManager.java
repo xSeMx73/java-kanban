@@ -266,7 +266,6 @@ private void loadHistory (String history) {
         manager.getSubtask(7);
         manager.getEpic(4);
 
-
         System.out.println("Задачи " + manager.getTasks());
         System.out.println("Подзадачи " + manager.getSubtasks());
         System.out.println("Эпики " + manager.getEpics());

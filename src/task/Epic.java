@@ -25,15 +25,16 @@ public class Epic extends Task {
             super.setDuration(duration);
         }
     }
-public void timeToNuLL (Subtask subtask){
+public void timeToNuLL (){
         super.setStartTime(null);
         endTime = null;
-    if (!(super.duration == null) && !(subtask.getDuration() == null)) {
-        super.setDuration(super.duration.minus(subtask.getDuration()));
-        if (super.getDuration().toMinutes() == 0){
-            super.setDuration(null);
-        }
-    }
+        super.setDuration(null);
+//    if (!(super.duration == null) && !(subtask.getDuration() == null)) {
+//        super.setDuration(super.duration.minus(subtask.getDuration()));
+//        if (super.getDuration().toMinutes() == 0){
+//            super.setDuration(null);
+//        }
+//    }
 }
 
 
