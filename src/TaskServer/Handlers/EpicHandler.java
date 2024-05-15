@@ -38,13 +38,13 @@ public class EpicHandler extends BaseHandler {
                     if (path.length == 2) {
                         List<Epic> epics = taskManager.getEpics();
                         String jsonEpics = gson.toJson(epics);
-                        send200(exchange, jsonEpics);
+                        send(exchange, jsonEpics, 200);
                     } else {
                         Epic epic = taskManager.getEpic(Integer.parseInt(path[2]));
                         if (epic == null) {
-                            send404(exchange, "Неверный ID");
+                            send(exchange, "Неверный ID",404);
                         } else {
-                            send200(exchange, String.valueOf(epic));
+                            send(exchange, String.valueOf(epic),200);
                         }
                     }
 
@@ -61,10 +61,10 @@ public class EpicHandler extends BaseHandler {
                     if (path.length == 2) {
                         taskManager.addEpic(epic1);
                         if (taskManager.epicsEquals(epic1)) {
-                            send201(exchange, "Эпик добавлен");
+                            send(exchange, "Эпик добавлен",201);
                             System.out.println("Пользователь добавил эпик");
                         } else {
-                            send406(exchange, "Ошибка добавления эпика");
+                            send(exchange, "Ошибка добавления эпика",406);
                         }
                         return;
 
@@ -72,13 +72,13 @@ public class EpicHandler extends BaseHandler {
                         epic1.setId(Integer.parseInt(path[2]));
                         taskManager.updateEpic(epic1);
                         if (taskManager.epicsEquals(epic1)) {
-                            send201(exchange, "Эпик обновлен");
+                            send(exchange, "Эпик обновлен",201);
                             System.out.println("Пользователь обновил эпик с Id-" + epic1.getId());
                         } else {
-                            send406(exchange, "Ошибка обновления эпика");
+                            send(exchange, "Ошибка обновления эпика",406);
                         }
                     } else {
-                        send404(exchange, "Неверно указан Id эпика");
+                        send(exchange, "Неверно указан Id эпика",404);
                     }
                 } catch (NoSuchElementException e) {
                     exchange.sendResponseHeaders(404, 0);
@@ -88,11 +88,11 @@ public class EpicHandler extends BaseHandler {
                 try {
                     int epicId = Integer.parseInt(path[2]);
                     if (!epicTemp.containsKey(epicId)) {
-                        send404(exchange, "Некорректно указан Id эпика");
+                        send(exchange, "Некорректно указан Id эпика",404);
                     } else {
                         taskManager.deleteEpic(epicId);
                     }
-                    send200(exchange, "Эпик удален");
+                    send(exchange, "Эпик удален",200);
                 } catch (Exception e) {
                     exchange.sendResponseHeaders(404, 0);
                 }

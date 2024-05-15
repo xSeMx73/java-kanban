@@ -14,9 +14,9 @@ public class PrioritizedHandler extends BaseHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         try {
-            send200(exchange, gson.toJson(taskManager.getPrioritizedTasks()));
+            send(exchange, gson.toJson(taskManager.getPrioritizedTasks()),200);
         } catch (Exception e) {
-            send404(exchange, ("Ошибка на сервере"));
+            send(exchange, ("Ошибка на сервере"),404);
         }
     }
 }

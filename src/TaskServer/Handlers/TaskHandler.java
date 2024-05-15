@@ -35,13 +35,13 @@ public class TaskHandler extends BaseHandler {
                 if (path.length == 2) {
                     List<Task> tasks = taskManager.getTasks();
                     String jsonTasks = gson.toJson(tasks);
-                    send200(exchange, jsonTasks);
+                    send(exchange, jsonTasks,200);
                 } else {
                     Task task = taskManager.getTask(Integer.parseInt(path[2]));
                     if (task == null) {
-                        send404(exchange, "Неверный ID");
+                        send(exchange, "Неверный ID",404);
                     } else {
-                        send200(exchange, String.valueOf(task));
+                        send(exchange, String.valueOf(task),200);
                     }
                 }
 
@@ -57,10 +57,10 @@ public class TaskHandler extends BaseHandler {
                     if (path.length == 2) {
                         taskManager.addTask(task);
                         if (taskManager.tasksEquals(task)) {
-                            send201(exchange, "Задача добавлена");
+                            send(exchange, "Задача добавлена",201);
                             System.out.println("Пользователь добавил задачу");
                         } else {
-                            send406(exchange, "Задача пересекается по времени с другой");
+                            send(exchange, "Задача пересекается по времени с другой",406);
                         }
                         return;
 
@@ -68,14 +68,14 @@ public class TaskHandler extends BaseHandler {
                         task.setId(Integer.parseInt(path[2]));
                         taskManager.updateTask(task, Integer.parseInt(path[2]));
                         if (taskManager.tasksEquals(task)) {
-                            send201(exchange, "Задача обновлена");
+                            send(exchange, "Задача обновлена",201);
                             System.out.println("Пользователь обновил задачу с Id-" + task.getId());
                             return;
                         } else {
-                            send406(exchange, "Задача пересекается по времени с другой");
+                            send(exchange, "Задача пересекается по времени с другой",406);
                         }
                     } else {
-                        send404(exchange, "Неверно указан Id задачи");
+                        send(exchange, "Неверно указан Id задачи",404);
                         return;
                     }
                 } catch (NoSuchElementException e) {
@@ -86,11 +86,11 @@ public class TaskHandler extends BaseHandler {
                 try {
                 int taskId = Integer.parseInt(path[2]);
                 if (!tasksTemp.containsKey(taskId)) {
-                   send404(exchange, "Некорректно указан Id задачи");
+                   send(exchange, "Некорректно указан Id задачи",404);
                     return;
                 }
                     taskManager.deleteTask(taskId);
-                    send200(exchange, "Задача удалена");
+                    send(exchange, "Задача удалена",200);
                 } catch (Exception e) {
                     exchange.sendResponseHeaders(404, 0);
                 }

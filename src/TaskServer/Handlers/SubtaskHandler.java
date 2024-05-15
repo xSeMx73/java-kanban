@@ -37,13 +37,13 @@ public class SubtaskHandler extends BaseHandler {
                         if (path.length == 2) {
                             List<Subtask> subtasks = taskManager.getSubtasks();
                             String jsonSubtasks = gson.toJson(subtasks);
-                            send200(exchange, jsonSubtasks);
+                            send(exchange, jsonSubtasks,200);
                         } else {
                             Subtask subtask = taskManager.getSubtask(Integer.parseInt(path[2]));
                             if (subtask == null) {
-                                send404(exchange, "Неверный ID");
+                                send(exchange, "Неверный ID",404);
                             } else {
-                                send200(exchange, String.valueOf(subtask));
+                                send(exchange, String.valueOf(subtask),200);
                             }
                         }
 
@@ -59,10 +59,10 @@ public class SubtaskHandler extends BaseHandler {
                         if (path.length == 2) {
                             taskManager.addSubtask(subtask);
                             if (taskManager.subtasksEquals(subtask)) {
-                                send201(exchange, "Подзадача добавлена");
+                                send(exchange, "Подзадача добавлена",201);
                                 System.out.println("Пользователь добавил подзадачу");
                             } else {
-                                send406(exchange, "Ошибка добавления подзадачи");
+                                send(exchange, "Ошибка добавления подзадачи",406);
                             }
                             return;
 
@@ -70,14 +70,14 @@ public class SubtaskHandler extends BaseHandler {
                             subtask.setId(Integer.parseInt(path[2]));
                             taskManager.updateSubtask(subtask);
                             if (taskManager.subtasksEquals(subtask)) {
-                                send201(exchange, "Подзадача обновлена");
+                                send(exchange, "Подзадача обновлена",201);
                                 System.out.println("Пользователь обновил подзадачу с Id-" + subtask.getId());
                                 return;
                             } else {
-                                send406(exchange, "Ошибка обновления, подзадача пересекается по времени с другой");
+                                send(exchange, "Ошибка обновления, подзадача пересекается по времени с другой",406);
                             }
                         } else {
-                            send404(exchange, "Неверно указан Id подзадачи");
+                            send(exchange, "Неверно указан Id подзадачи",404);
                             return;
                         }
                     } catch (NoSuchElementException e) {
@@ -88,11 +88,11 @@ public class SubtaskHandler extends BaseHandler {
                     try {
                         int subtaskId = Integer.parseInt(path[2]);
                         if (!subtaskTemp.containsKey(subtaskId)) {
-                            send404(exchange, "Некорректно указан Id подзадачи");
+                            send(exchange, "Некорректно указан Id подзадачи",404);
                             return;
                         }
                         taskManager.deleteSubtask(subtaskId);
-                        send200(exchange, "Подзадача удалена");
+                        send(exchange, "Подзадача удалена",200);
                     } catch (Exception e) {
                         exchange.sendResponseHeaders(404, 0);
                     }

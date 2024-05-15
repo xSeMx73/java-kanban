@@ -44,13 +44,7 @@ public class HttpTaskServer {
     public static void main(String[] args) throws IOException {
         FileBackedTaskManager taskManager = new FileBackedTaskManager(dataBaseServer);
         HttpTaskServer server = new HttpTaskServer(taskManager);
-       // {"title":"Задача10","description":"Task10","status":"NEW"}
-       // {"title":"Задача10","description":"Task11","status":"NEW","startTime":"2024-06-13T19:55","duration":"1"}
-        //{"title":"Подзадача1","description":"Подзадача1","status":"NEW","epicID":"1"}
-        //{"title":"Эпик1","description":"Эпик1"}
-        //{"title":"Подзадача1","description":"Подзадача1","epicID":"1","status":"NEW"}
-        //{"title":"Подзадача1","description":"Подзадача1","epicID":"1","status":"IN_PROGRESS"}
-        //{"title":"Подзадача2","description":"Подзадача2","status":"IN_PROGRESS","epicID":"1","startTime":"2024-06-13T19:55","duration":"1"}
+
 
     }
 }

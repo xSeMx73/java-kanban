@@ -15,9 +15,9 @@ public class HistoryHandler extends BaseHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         try {
-            send200(exchange, gson.toJson(taskManager.getHistory()));
+            send(exchange, gson.toJson(taskManager.getHistory()),200);
         } catch (Exception e) {
-            send404(exchange, "Ошибка на сервере");
+            send(exchange, "Ошибка на сервере",404);
         }
     }
 }
