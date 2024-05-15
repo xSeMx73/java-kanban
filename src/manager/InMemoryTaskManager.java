@@ -138,8 +138,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateEpic(Epic epic) {
         if (epics.containsKey(epic.getId())) {
-            epics.get(id).setDescription(epic.getDescription());
-            epics.get(id).setTitle(epic.getTitle());
+            epics.get(epic.getId()).setDescription(epic.getDescription());
+            epics.get(epic.getId()).setTitle(epic.getTitle());
         }
 
     }
@@ -342,6 +342,18 @@ public class InMemoryTaskManager implements TaskManager {
         return true;
     }
 
+  @Override
+   public boolean tasksEquals (Task task) {
+        return tasks.containsValue(task);
+    }
+   @Override
+    public boolean subtasksEquals (Subtask subtask) {
+        return subtasks.containsValue(subtask);
+    }
+    @Override
+    public boolean epicsEquals(Epic epic) {
+        return epics.containsValue(epic);
+    }
 
     Comparator<Task> taskComparator = (o1, o2) -> {
         if (o1.getId() == o2.getId()) {
@@ -361,6 +373,7 @@ public class InMemoryTaskManager implements TaskManager {
             return o1.getId() - o2.getId();
         }
     };
+
 
 }
 

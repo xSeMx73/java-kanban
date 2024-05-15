@@ -42,4 +42,19 @@ public class Subtask extends Task {
                 + Objects.toString(getDuration(), "") + ","
                 + Objects.toString(getEndTime(), "");
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Subtask subtask = (Subtask) o;
+        return Objects.equals(id, subtask.id) && Objects.equals(title, subtask.title) && Objects.equals(description, subtask.description) && Objects.equals(startTime, subtask.startTime)
+                && Objects.equals(duration, subtask.duration) && Objects.equals(epicID, subtask.epicID) && status == subtask.status;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), epicID);
+    }
 }

@@ -29,12 +29,7 @@ public void timeToNuLL (){
         super.setStartTime(null);
         endTime = null;
         super.setDuration(null);
-//    if (!(super.duration == null) && !(subtask.getDuration() == null)) {
-//        super.setDuration(super.duration.minus(subtask.getDuration()));
-//        if (super.getDuration().toMinutes() == 0){
-//            super.setDuration(null);
-//        }
-//    }
+
 }
 
 
@@ -92,5 +87,18 @@ public void timeToNuLL (){
                 + Objects.toString(getStartTime(), "") + ","
                 + Objects.toString(getDuration(), "") + ","
                 + Objects.toString(getEndTime(), "");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Epic epic = (Epic) o;
+        return Objects.equals(epicSubtasksID, epic.epicSubtasksID) && Objects.equals(endTime, epic.endTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(epicSubtasksID, endTime);
     }
 }

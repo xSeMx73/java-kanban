@@ -45,4 +45,12 @@ public interface TaskManager {
 
     void deleteAllSubtask();
 
+    boolean tasksEquals (Task task);
+
+    boolean subtasksEquals(Subtask subtask);
+
+    boolean epicsEquals(Epic epic);
+
+    List<Task> getPrioritizedTasks();
 }
+
