@@ -3,8 +3,6 @@ package manager;
 import task.Epic;
 import task.Subtask;
 import task.Task;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskManager {
@@ -46,5 +44,13 @@ public interface TaskManager {
     void deleteSubtask(int id);
 
     void deleteAllSubtask();
+
+    boolean tasksEquals (Task task);
+
+    boolean subtasksEquals(Subtask subtask);
+
+    boolean epicsEquals(Epic epic);
+
     List<Task> getPrioritizedTasks();
 }
+

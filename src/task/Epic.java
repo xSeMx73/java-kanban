@@ -5,7 +5,6 @@ import static task.TaskType.EPIC;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class Epic extends Task {
@@ -20,12 +19,20 @@ public class Epic extends Task {
 
     @Override
     public void setDuration(Duration duration) {
-        if (!(super.duration == null)) {
+        if (super.duration != null) {
             super.setDuration(super.duration.plus(duration));
         } else {
             super.setDuration(duration);
         }
     }
+public void timeToNuLL (){
+        super.setStartTime(null);
+        endTime = null;
+        super.setDuration(null);
+
+}
+
+
 
     @Override
     public void setStartTime(LocalDateTime startTime) {
@@ -80,5 +87,18 @@ public class Epic extends Task {
                 + Objects.toString(getStartTime(), "") + ","
                 + Objects.toString(getDuration(), "") + ","
                 + Objects.toString(getEndTime(), "");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Epic epic = (Epic) o;
+        return Objects.equals(epicSubtasksID, epic.epicSubtasksID) && Objects.equals(endTime, epic.endTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(epicSubtasksID, endTime);
     }
 }
